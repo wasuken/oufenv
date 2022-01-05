@@ -1,0 +1,6 @@
+[submodule "oufront"]
+	path = oufront
+	url = git@github.com:wasuken/oufront.git
+[submodule "ouf_api"]
+	path = ouf_api
+	url = git@github.com:wasuken/ouf_api.git

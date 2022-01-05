@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  web:
+    container_name: ouf_web
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./ouf_api:/api
+      - ./oufront:/front
+      - ./doc:/doc
+    ports:
+      - "4500:80"
+      - "6006:6006"
+    networks:
+      - application
+
+  mysql:
+    container_name: ouf_mysql
+    build:
+      context: .
+      dockerfile: ./Dockerfile.mysql
+    ports:
+      - "3336:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_DATABASE: oufdb
+      MYSQL_USER: oufuser
+      MYSQL_PASSWORD: oufwww
+    volumes:
+      - db8-store:/var/lib/mysql
+      - db8-log-store:/var/log/mysql
+      - ./my.cnf:/etc/mysql/conf.d/my.cnf
+    networks:
+      - application
+
+  phpmyadmin:
+     container_name: ouf_pma
+     image: phpmyadmin/phpmyadmin
+     ports:
+      - "3000:80"
+     networks:
+      - application
+     environment:
+       PMA_ARBITRARY: 1
+       PMA_HOSTS: mysql
+       PMA_USER: root
+       PMA_PASSWORD: test
+
+networks:
+  application:
+    driver: bridge
+
+volumes:
+  db8-store:
+  db8-log-store:
